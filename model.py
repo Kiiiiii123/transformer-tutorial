@@ -1,6 +1,7 @@
 import math
 from turtle import forward
 
+import numpy as np
 import torch
 import torch.nn as nn
 from torch.autograd import Variable
@@ -52,3 +53,9 @@ class PositionalEncoding(nn.Module):
 # pe = PositionalEncoding(d_model, dropout, max_len)
 # pe_result = pe(x)
 # print('pe_result:', pe_result)
+
+
+def subsequent_mask(size):
+    attn_shape = (1, size, size)
+    subsequent_mask = np.triu(np.ones(attn_shape), k=1).astype("uint8")
+    return torch.from_numpy(1 - subsequent_mask)
