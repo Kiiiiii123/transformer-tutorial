@@ -168,3 +168,11 @@ class LayerNorm(nn.Module):
         return self.a2 * (x - mean) / (std + self.eps) + self.b2
 
 
+# features = d_model = 512
+# eps = 1e-6
+# ln = LayerNorm(features, eps)
+# ln_result = ln(x)
+# print(ln_result)
+
+
+
