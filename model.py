@@ -60,7 +60,7 @@ def subsequent_mask(size):
     attn_shape = (1, size, size)
     subsequent_mask = np.triu(np.ones(attn_shape), k=1).astype("uint8")
     return torch.from_numpy(1 - subsequent_mask)
-  
+
 
 # Attention Machanism
 def attention(query, key, value, mask=None, dropout=None):
@@ -76,4 +76,3 @@ def attention(query, key, value, mask=None, dropout=None):
         p_attn = dropout(p_attn)
 
     return torch.matmul(p_attn, value), p_attn
-
