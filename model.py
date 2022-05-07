@@ -120,3 +120,14 @@ class MultiHeadedAttention(nn.Module):
         x = x.transpose(1, 2).contiguous().view(batch_size, -1, self.d_k * self.head)
 
         return self.linears[-1](x)
+
+
+# head = 8
+# embedding_dim =512
+# dropout = 0.2
+# query = key = value = pe_result
+# mask = Variable(torch.zeros(8, 4, 4))
+# mha = MultiHeadedAttention(head, embedding_dim, dropout)
+# mha_result = mha(query, key, value, mask)
+# print(mha_result)
+# print(mha_result.shape)
