@@ -112,11 +112,11 @@ class MultiHeadedAttention(nn.Module):
             mask = mask.unsqueeze(1)
 
         batch_size = query.size(0)
-        query, key, value = [model(x).view(batch_size, -1, self.head, self.d_k).transpose(1, 2) for model, x in zip(self.linears, (query, key, value))]
+        query, key, value = [
+            model(x).view(batch_size, -1, self.head, self.d_k).transpose(1, 2)
+            for model, x in zip(self.linears, (query, key, value))
+        ]
         x, self.attn = attention(query, key, value, mask=mask, dropout=self.dropout)
-        x = x.transpose(1, 2).contiguous().view(batch_size, -1, self.d_k*self.head)
-        
+        x = x.transpose(1, 2).contiguous().view(batch_size, -1, self.d_k * self.head)
+
         return self.linears[-1](x)
-
-
-
