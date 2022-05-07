@@ -76,3 +76,9 @@ def attention(query, key, value, mask=None, dropout=None):
         p_attn = dropout(p_attn)
 
     return torch.matmul(p_attn, value), p_attn
+
+
+# query = key = value = pe_result 
+# attn, p_attn = attention(query, key, value)
+# print('attn', attn)
+# print('p_attn', p_attn)
