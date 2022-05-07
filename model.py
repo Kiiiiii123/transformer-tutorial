@@ -175,4 +175,26 @@ class LayerNorm(nn.Module):
 # print(ln_result)
 
 
+class SublayerConnection(nn.Module):
+    def __init__(self, size, dropout=0.1):
+        super(SublayerConnection, self).__init__()
 
+        self.norm = LayerNorm(size)
+        self.dropout = nn.Dropout(dropout)
+
+    def forward(self, x, sublayer):
+        return x + self.dropout(sublayer(self.norm(x)))
+
+
+# size = 512
+# dropout = 0.2
+# head = 8
+# d_model = 512
+# x = pe_result
+# mask = Variable(torch.zeros(8, 4, 4))
+# self_attn = MultiHeadedAttention(head, d_model)
+# sublayer = lambda x: self_attn(x, x, x, mask)
+# sc = SublayerConnection(size, dropout)
+# sc_result = sc(x, sublayer)
+# print(sc_result)
+# print(sc_result.shape)
