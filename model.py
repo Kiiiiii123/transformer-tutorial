@@ -79,6 +79,18 @@ def attention(query, key, value, mask=None, dropout=None):
 
 
 # query = key = value = pe_result 
-# attn, p_attn = attention(query, key, value)
+# mask = torch.Variable(torch.zeros(2, 4, 4))
+# attn, p_attn = attention(query, key, value, mask=mask)
 # print('attn', attn)
+# print(attn.shape)
 # print('p_attn', p_attn)
+# print(p_attn.shape)
+
+
+# Multi-head Attention Machanism
+import copy # for deep copy
+
+def clones(module, N):
+    return nn.ModuleList([copy.deepcopy(module) for _ in range(N)])
+
+    
