@@ -131,3 +131,23 @@ class MultiHeadedAttention(nn.Module):
 # mha_result = mha(query, key, value, mask)
 # print(mha_result)
 # print(mha_result.shape)
+
+
+class PositionwiseFeedForward(nn.Module):
+    def __init__(self, d_model, d_ff, dropout=0.1):
+        super(PositionwiseFeedForward, self).__init__()
+
+        self.w1 = nn.Linear(d_model, d_ff)
+        self.w2 = nn.Linear(d_ff, d_model)
+        self.dropout = nn.Dropout(dropout)
+
+    def forward(self, x):
+        return self.w2(self.dropout(F.relu(self.w1(x))))
+
+
+# d_model = 512
+# d_ff = 64
+# dropout = 0.2
+# ff = PositionwiseFeedForward(d_model, d_ff, dropout)
+# ff_result = ff(x)
+# print(ff_result)
