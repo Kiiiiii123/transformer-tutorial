@@ -227,3 +227,33 @@ class EncoderLayer(nn.Module):
 # el_result = el(x, mask)
 # print(el_result)
 # print(el_result.shape)
+
+
+class Encoder(nn.Module):
+    def __init__(self, layer, N):
+        super(Encoder, self).__init__()
+
+        self.layers = clones(layer, N)
+        self.norm = LayerNorm(layer.size)
+
+    def forward(self, x, mask):
+        for layer in self.layers:
+            x = layer(x, mask)
+        return self.norm(x)
+
+
+# size = 512
+# head = 8
+# d_model = 512
+# d_ff = 64
+# dropout = 0.2
+# c = copy.deepcopy
+# attn = MultiHeadedAttention(head, d_model)
+# ff = PositionwiseFeedForward(d_model, d_ff, dropout)
+# layer = EncoderLayer(size, c(attn), c(ff), dropout)
+# N = 8
+# mask = Variable(torch.zeros(8, 4, 4))
+# en = Encoder(layer, N)
+# en_result = en(x, mask)
+# print(en_result)
+# print(en_result.shape)
