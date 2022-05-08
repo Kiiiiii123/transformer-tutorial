@@ -198,3 +198,32 @@ class SublayerConnection(nn.Module):
 # sc_result = sc(x, sublayer)
 # print(sc_result)
 # print(sc_result.shape)
+
+
+class EncoderLayer(nn.Module):
+    def __init__(self, size, self_attn, feed_forward, dropout):
+        super(EncoderLayer, self).__init__()
+
+        self.self_attn = self_attn
+        self.feed_forward = feed_forward
+        self.sublayer = clones(SublayerConnection(size, dropout), 2)
+        self.size = size
+
+    def forward(self, x, mask):
+        x = self.sublayer[0](x, lambda x: self.self_attn(x, x, x, mask))
+        return self.sublayer[1](x, self.feed_forward)
+
+
+# size = 512
+# head = 8
+# d_model = 512
+# d_ff = 64
+# x = pe_result
+# dropout = 0.2
+# self_attn = MultiHeadedAttention(head, d_model)
+# ff = PositionwiseFeedForward(d_model, d_ff, dropout)
+# mask = Variable(torch.zeros(8, 4, 4))
+# el = EncoderLayer(size, self_attn, ff, dropout)
+# el_result = el(x, mask)
+# print(el_result)
+# print(el_result.shape)
