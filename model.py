@@ -410,12 +410,3 @@ def make_model(source_vocab, target_vocab, N=6, d_model=512, d_ff=64, head=8, dr
 # if __name__ == '__main__':
 #     res = make_model(source_vocab, target_vocab, N)
 #     print(model)
-
-
-
-
-
-
-
-
-
