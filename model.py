@@ -326,6 +326,21 @@ class Decoder(nn.Module):
 # print(de_result.shape)
 
 
+class Generator(nn.Module):
+    def __init__(self, d_model, vocab_size):
+        super(Generator, self).__init__()
+
+        self.project = nn.Linear(d_model, vocab_size)
+
+    def forward(self, x):
+        return F.log_softmax(self.project(x), dim=-1)
 
 
+# d_model = 512
+# vocab_size = 1000
+# x = de_result
+# gen = Generator(d_model, vocab_size)
+# gen_result = gen(x)
+# print(gen_result)
+# print(gen_result.shape)
 
