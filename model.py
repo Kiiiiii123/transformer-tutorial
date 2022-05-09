@@ -400,7 +400,21 @@ def make_model(source_vocab, target_vocab, N=6, d_model=512, d_ff=64, head=8, dr
             nn.init.xavier_uniform(p)
     
     return model
-    
+
+
+# source_vocab = 11
+# target_vocab = 11
+# N = 6
+# other parameters use default values
+
+# if __name__ == '__main__':
+#     res = make_model(source_vocab, target_vocab, N)
+#     print(model)
+
+
+
+
+
 
 
 
