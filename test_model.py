@@ -53,7 +53,7 @@ loss = SimpleLossCompute(model.generator, criterion, model_optimizer)
 # plt.imshow(crit.true_dist)
 
 
-def run_1(model, loss, epochs=10):
+def run(model, loss, epochs=10):
     for epoch in range(epochs):
         model.train()
         run_epoch(data_generator(V, 8, 20), model, loss)
