@@ -1,8 +1,13 @@
 import numpy as np
 import torch
-from pyitcast.transformer_utils import (Batch, LabelSmoothing,
-                                        SimpleLossCompute, get_std_opt,
-                                        run_epoch)
+from pyitcast.transformer_utils import (
+    Batch,
+    LabelSmoothing,
+    SimpleLossCompute,
+    get_std_opt,
+    greedy_decode,
+    run_epoch,
+)
 from torch.autograd import Variable
 
 from model import make_model
@@ -47,7 +52,8 @@ loss = SimpleLossCompute(model.generator, criterion, model_optimizer)
 # crit(predict, target)
 # plt.imshow(crit.true_dist)
 
-def run(model, loss, epochs=10):
+
+def run_1(model, loss, epochs=10):
     for epoch in range(epochs):
         model.train()
         run_epoch(data_generator(V, 8, 20), model, loss)
@@ -55,4 +61,12 @@ def run(model, loss, epochs=10):
         model.eval()
         run_epoch(data_generator(V, 8, 5), model, loss)
 
-epochs = 10
+    model.eval()
+    source = Variable(torch.LongTensor([[1, 3, 2, 5, 4, 6, 7, 8, 9, 10]]))
+    source_mask = Variable(torch.ones(1, 1, 10))
+    result = greedy_decode(model, source, source_mask, max_len=10, start_symbol=1)
+    print(result)
+
+
+# if __name__ == "__main__":
+#     run(model, loss)
