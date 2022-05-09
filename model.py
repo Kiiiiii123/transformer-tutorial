@@ -273,7 +273,7 @@ class DecoderLayer(nn.Module):
         m = memory
         x = self.sublayer[0](x, lambda x: self.self_attn(x, x, x, target_mask))
         x = self.sublayer[1](x, lambda x: self.src_attn(x, m, m, source_mask))
-        return self.sublayer[2](x, self.feed_forwrad())
+        return self.sublayer[2](x, self.feed_forwrad)
 
 
 # size = 512
@@ -293,8 +293,39 @@ class DecoderLayer(nn.Module):
 # print(dl_result.shape)
 
 
-
+class Decoder(nn.Module):
+    def __init__(self, layer, N):
+        super(Decoder, self).__init__()
         
+        self.layers = clones(layer, N)
+        self.norm = LayerNorm(layer.size)
+
+    def forwrad(self, x, memory, source_mask, target_mask):
+        for layer in self.layers:
+            x = layer(x, memory, source_mask, target_mask)
+        return  self.norm(x)
+
+
+# size = 512
+# head = 8
+# d_model = 512
+# d_ff = 64
+# dropout = 0.2
+# c = copy.deepcopy
+# attn = MultiHeadedAttention(head, d_model)
+# ff = PositionwiseFeedForward(d_model, d_ff, dropout)
+# layer = DecoderLayer(d_model, c(attn), c(attn), c(ff), dropout)
+# N = 8
+# x = pe_result
+# memory = en_result
+# mask = Variable(torch.zeros(8, 4, 4))
+# source_mask = target_mask = mask
+# de = Decoder(layer, N)
+# de_result = de(x, memory, source_mask, target_mask)
+# print(de_result)
+# print(de_result.shape)
+
+
 
 
 
