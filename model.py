@@ -257,3 +257,44 @@ class Encoder(nn.Module):
 # en_result = en(x, mask)
 # print(en_result)
 # print(en_result.shape)
+
+
+class DecoderLayer(nn.Module):
+    def __init__(self, size, self_attn, src_attn, feed_forwrad, dropout):
+        super(DecoderLayer, self).__init()
+
+        self.size = size
+        self.self_attn = self_attn
+        self.src_attn = src_attn
+        self.feed_forwrad = feed_forwrad
+        self.sublayer = clones(SublayerConnection(size, dropout), 3)
+
+    def forward(self, x, memory, source_mask, target_mask):
+        m = memory
+        x = self.sublayer[0](x, lambda x: self.self_attn(x, x, x, target_mask))
+        x = self.sublayer[1](x, lambda x: self.src_attn(x, m, m, source_mask))
+        return self.sublayer[2](x, self.feed_forwrad())
+
+
+# size = 512
+# head = 8
+# d_model = 512
+# d_ff = 64
+# dropout = 0.2
+# self_attn = src_attn = MultiHeadedAttention(head, d_model, dropout)
+# ff = PositionwiseFeedForward(d_model, d_ff, dropout)
+# x = pe_result
+# memory = en_result
+# mask = Variable(torch.zeors(8, 4, 4))
+# source_mask = target_mask = mask
+# dl = DecoderLayer(size, self_attn, src_attn, ff, dropout)
+# dl_result = dl(x, memory, source_mask, target_mask)
+# print(dl_result)
+# print(dl_result.shape)
+
+
+
+        
+
+
+
