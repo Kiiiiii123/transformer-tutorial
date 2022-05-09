@@ -363,3 +363,18 @@ class EncoderDecoder(nn.Module):
 
     def decode(self, memory, source_mask, target, target_mask):
         return self.decoder(self.tgt_embed(target), memory, source_mask, target_mask)
+
+    
+vocab_size = 1000
+d_model = 512
+encoder = en
+decoder = de
+generator = gen
+source_embed = nn.Embedding(vocab_size, d_model)
+target_embed = nn.Embedding(vocab_size, d_model)
+source = target = Variable(torch.LongTensor([[100, 2, 421, 508], [491, 998, 1, 221]]))
+source_mask = target_mask = Variable(torch.zeros(8, 4, 4))
+ed = EncoderDecoder(encoder, decoder, source_embed, target_embed, generator)
+ed_result = ed(source, target, source_mask, target_mask)
+print(ed_result)
+print(ed_result.shape)
