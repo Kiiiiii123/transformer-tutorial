@@ -365,16 +365,43 @@ class EncoderDecoder(nn.Module):
         return self.decoder(self.tgt_embed(target), memory, source_mask, target_mask)
 
     
-vocab_size = 1000
-d_model = 512
-encoder = en
-decoder = de
-generator = gen
-source_embed = nn.Embedding(vocab_size, d_model)
-target_embed = nn.Embedding(vocab_size, d_model)
-source = target = Variable(torch.LongTensor([[100, 2, 421, 508], [491, 998, 1, 221]]))
-source_mask = target_mask = Variable(torch.zeros(8, 4, 4))
-ed = EncoderDecoder(encoder, decoder, source_embed, target_embed, generator)
-ed_result = ed(source, target, source_mask, target_mask)
-print(ed_result)
-print(ed_result.shape)
+# vocab_size = 1000
+# d_model = 512
+# encoder = en
+# decoder = de
+# generator = gen
+# source_embed = nn.Embedding(vocab_size, d_model)
+# target_embed = nn.Embedding(vocab_size, d_model)
+# source = target = Variable(torch.LongTensor([[100, 2, 421, 508], [491, 998, 1, 221]]))
+# source_mask = target_mask = Variable(torch.zeros(8, 4, 4))
+# ed = EncoderDecoder(encoder, decoder, source_embed, target_embed, generator)
+# ed_result = ed(source, target, source_mask, target_mask)
+# print(ed_result)
+# print(ed_result.shape)
+
+
+def make_model(source_vocab, target_vocab, N=6, d_model=512, d_ff=64, head=8, dropout=0.1):
+    c = copy.deepcopy
+
+    attn = MultiHeadedAttention(head, d_model)
+    ff = PositionwiseFeedForward(d_model, d_ff, dropout)
+    position = PositionalEncoding(d_model, dropout)
+
+    model = EncoderDecoder(
+        Encoder(EncoderLayer(d_model, c(attn), c(ff), dropout), N),
+        Decoder(DecoderLayer(d_model, c(attn), c(attn), c(ff), dropout), N),
+        nn.Sequential(Embeddings(d_model, source_vocab), c(position)),
+        nn.Sequential(Embeddings(d_model, target_vocab), c(position)),
+        Generator(d_model, target_vocab)
+    )
+
+    for p in model.parameters():
+        if p.dim() > 1:
+            nn.init.xavier_uniform(p)
+    
+    return model
+    
+
+
+
+
